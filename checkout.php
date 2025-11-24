@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
     $total_price = $_POST['total_price'];
     
     $start_datetime = $date . ' ' . $start_time;
-    $end_datetime = date('Y-m-d H:i:s', strtotime($start_datetime . " +$duration hours"));
+    $end_datetime = date('Y-m-d H:i:s', strtotime($start_datetime . " +$duration days"));
     
     $sql = "INSERT INTO bookings (venue_id, client_id, start_time, end_time, total_price, status) 
             VALUES (:venue_id, :client_id, :start_time, :end_time, :total_price, 'pending')";
@@ -39,14 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
         $error = "Booking failed: " . $e->getMessage();
     }
 }
-
 // Data passed from venue.php
 $venue_id = $_POST['venue_id'] ?? '';
 $date = $_POST['date'] ?? '';
 $start_time = $_POST['start_time'] ?? '';
 $duration = $_POST['duration'] ?? '';
-$price_per_hour = $_POST['price_per_hour'] ?? 0;
-$total_price = $price_per_hour * $duration;
+$price_per_day = $_POST['price_per_day'] ?? 0;
+$total_price = $price_per_day * $duration;
 
 if (!$venue_id) {
     header("Location: index.php");
@@ -58,13 +57,13 @@ if (!$venue_id) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - VenueBook</title>
+    <title>Checkout - Space Link</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.php" class="logo">VenueBook</a>
+            <a href="index.php" class="logo">Space Link</a>
         </div>
     </nav>
 
@@ -74,8 +73,8 @@ if (!$venue_id) {
             <h3>Order Summary</h3>
             <p><strong>Date:</strong> <?php echo htmlspecialchars($date); ?></p>
             <p><strong>Time:</strong> <?php echo htmlspecialchars($start_time); ?></p>
-            <p><strong>Duration:</strong> <?php echo htmlspecialchars($duration); ?> hours</p>
-            <p style="font-size: 1.2rem; margin-top: 10px; color: var(--primary-color);"><strong>Total: $<?php echo number_format($total_price, 2); ?></strong></p>
+            <p><strong>Duration:</strong> <?php echo htmlspecialchars($duration); ?> days</p>
+            <p style="font-size: 1.2rem; margin-top: 10px; color: var(--primary-color);"><strong>Total: sh <?php echo number_format($total_price, 2); ?></strong></p>
         </div>
 
         <form action="checkout.php" method="POST">

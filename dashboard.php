@@ -23,14 +23,32 @@ if ($role === 'host' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['c
     // Handle Image Upload
     $image_url = '';
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
-        $upload_dir = 'uploads/';
-        $filename = uniqid() . '_' . basename($_FILES['image']['name']);
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename)) {
-            $image_url = $upload_dir . $filename;
+        $relative_dir = 'uploads/';
+        $absolute_dir = __DIR__ . '/' . $relative_dir;
+        
+        if (!is_dir($absolute_dir)) {
+            if (!mkdir($absolute_dir, 0777, true)) {
+                $message = "Error: Failed to create uploads directory at " . $absolute_dir;
+            }
         }
+        
+        $filename = uniqid() . '_' . basename($_FILES['image']['name']);
+        $target_file = $absolute_dir . $filename;
+        
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            $image_url = $relative_dir . $filename;
+        } else {
+            $message = "Error: Failed to move uploaded file to " . $target_file . 
+                       " | Tmp: " . $_FILES['image']['tmp_name'] . 
+                       " | Err: " . $_FILES['image']['error'] .
+                       " | Dir Exists: " . (is_dir($absolute_dir) ? 'Yes' : 'No') .
+                       " | Writable: " . (is_writable($absolute_dir) ? 'Yes' : 'No');
+        }
+    } elseif (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $message = "Upload Error Code: " . $_FILES['image']['error'];
     }
 
-    $sql = "INSERT INTO venues (host_id, name, description, address, price_per_hour, capacity, image_url) 
+    $sql = "INSERT INTO venues (host_id, name, description, address, price_per_day, capacity, image_url) 
             VALUES (:host_id, :name, :description, :address, :price, :capacity, :image_url)";
     $stmt = $pdo->prepare($sql);
     try {
@@ -53,6 +71,7 @@ if ($role === 'host' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['c
 if ($role === 'host' && isset($_POST['update_status'])) {
     $booking_id = $_POST['booking_id'];
     $status = $_POST['status'];
+    $stmt = $pdo->prepare("UPDATE bookings SET status = :status WHERE id = :id");
     $stmt->execute(['status' => $status, 'id' => $booking_id]);
     $message = "Booking updated.";
 }
@@ -80,15 +99,18 @@ if ($role === 'host' && isset($_POST['delete_venue'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - VenueBook</title>
+    <title>Dashboard - Space Link</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.php" class="logo">VenueBook</a>
+            <a href="index.php" class="logo">Space Link</a>
             <div class="nav-links">
                 <a href="index.php">Home</a>
+                <?php if ($role === 'admin'): ?>
+                    <a href="admin/index.php">Admin Panel</a>
+                <?php endif; ?>
                 <a href="logout.php">Logout</a>
             </div>
         </div>
@@ -124,7 +146,7 @@ if ($role === 'host' && isset($_POST['delete_venue'])) {
                         <input type="text" name="address" required>
                     </div>
                     <div class="form-group">
-                        <label>Price per Hour ($)</label>
+                        <label>Price per Day (sh)</label>
                         <input type="number" name="price" step="0.01" required>
                     </div>
                     <div class="form-group">
@@ -146,10 +168,10 @@ if ($role === 'host' && isset($_POST['delete_venue'])) {
                     $my_venues = getHostVenues($pdo, $user_id);
                     foreach ($my_venues as $venue): ?>
                         <div class="venue-card">
-                            <img src="<?php echo htmlspecialchars($venue['image_url'] ?: 'assets/images/placeholder.jpg'); ?>" alt="<?php echo htmlspecialchars($venue['name']); ?>">
+                            <img src="<?php echo htmlspecialchars($venue['image_url'] ?: 'assets/images/placeholder.png'); ?>" alt="<?php echo htmlspecialchars($venue['name']); ?>">
                             <div class="venue-info">
                                 <h3><?php echo htmlspecialchars($venue['name']); ?></h3>
-                                <p>$<?php echo htmlspecialchars($venue['price_per_hour']); ?>/hr</p>
+                                <p>sh <?php echo htmlspecialchars($venue['price_per_day']); ?>/day</p>
                                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                                     <a href="venue.php?id=<?php echo $venue['id']; ?>" class="btn" style="flex: 1; text-align: center;">View</a>
                                     <a href="edit_venue.php?id=<?php echo $venue['id']; ?>" class="btn" style="flex: 1; text-align: center; background-color: #f59e0b;">Edit</a>

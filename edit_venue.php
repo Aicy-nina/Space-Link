@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $sql = "UPDATE venues SET name = :name, description = :description, address = :address, 
-            price_per_hour = :price, capacity = :capacity, image_url = :image_url 
+            price_per_day = :price, capacity = :capacity, image_url = :image_url 
             WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     
@@ -69,13 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Venue - VenueBook</title>
+    <title>Edit Venue - Space Link</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.php" class="logo">VenueBook</a>
+            <a href="index.php" class="logo">Space Link</a>
             <div class="nav-links">
                 <a href="dashboard.php">Dashboard</a>
                 <a href="logout.php">Logout</a>
@@ -106,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="address" value="<?php echo htmlspecialchars($venue['address']); ?>" required>
                 </div>
                 <div class="form-group">
-                    <label>Price per Hour ($)</label>
-                    <input type="number" name="price" step="0.01" value="<?php echo htmlspecialchars($venue['price_per_hour']); ?>" required>
+                    <label>Price per Day (sh)</label>
+                    <input type="number" name="price" step="0.01" value="<?php echo htmlspecialchars($venue['price_per_day']); ?>" required>
                 </div>
                 <div class="form-group">
                     <label>Capacity</label>

@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
+    --primary-color: #a10da8;
+    --primary-hover: #3a38ca;
     --text-color: #1f2937;
     --bg-color: #f3f4f6;
     --card-bg: #ffffff;
@@ -40,7 +40,7 @@ body {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: black;
     text-decoration: none;
 }
 
@@ -57,10 +57,10 @@ body {
 }
 
 .hero {
-    background: linear-gradient(rgba(79, 70, 229, 0.9), rgba(67, 56, 202, 0.9)), url('../images/hero-bg.jpg');
+    background: url('../images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
-    color: white;
+    color: #ffffff;
     padding: 100px 0;
     text-align: center;
     margin-bottom: 40px;

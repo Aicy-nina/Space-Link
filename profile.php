@@ -52,13 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile - VenueBook</title>
+    <title>Edit Profile - Space Link</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.php" class="logo">VenueBook</a>
+            <a href="index.php" class="logo">Space Link</a>
             <div class="nav-links">
                 <a href="dashboard.php">Dashboard</a>
                 <a href="logout.php">Logout</a>

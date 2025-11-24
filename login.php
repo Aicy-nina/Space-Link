@@ -30,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - VenueBook</title>
+    <title>Login - Space Link</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.php" class="logo">VenueBook</a>
+            <a href="index.php" class="logo">Space Link</a>
         </div>
     </nav>
 

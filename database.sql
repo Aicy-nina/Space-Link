@@ -10,8 +10,17 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     national_id VARCHAR(20),
-    role ENUM('host', 'client') NOT NULL DEFAULT 'client',
+    role ENUM('host', 'client', 'admin') NOT NULL DEFAULT 'client',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS admin_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id INT NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS venues (
@@ -20,7 +29,7 @@ CREATE TABLE IF NOT EXISTS venues (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     address VARCHAR(255) NOT NULL,
-    price_per_hour DECIMAL(10, 2) NOT NULL,
+    price_per_day DECIMAL(10, 2) NOT NULL,
     capacity INT NOT NULL,
     image_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

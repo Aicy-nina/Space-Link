@@ -1,5 +1,5 @@
 <?php
-function getVenues($pdo, $search = '', $min_price = '', $max_price = '', $capacity = '') {
+function getVenues($pdo, $search = '', $min_price = '', $max_price = '', $capacity = '', $limit = 10, $offset = 0) {
     $sql = "SELECT * FROM venues WHERE 1=1";
     $params = [];
 
@@ -8,11 +8,11 @@ function getVenues($pdo, $search = '', $min_price = '', $max_price = '', $capaci
         $params['search'] = "%$search%";
     }
     if ($min_price) {
-        $sql .= " AND price_per_hour >= :min_price";
+        $sql .= " AND price_per_day >= :min_price";
         $params['min_price'] = $min_price;
     }
     if ($max_price) {
-        $sql .= " AND price_per_hour <= :max_price";
+        $sql .= " AND price_per_day <= :max_price";
         $params['max_price'] = $max_price;
     }
     if ($capacity) {
@@ -20,8 +20,17 @@ function getVenues($pdo, $search = '', $min_price = '', $max_price = '', $capaci
         $params['capacity'] = $capacity;
     }
 
+    $sql .= " LIMIT :limit OFFSET :offset";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
+    
+    // Bind params
+    foreach ($params as $key => $value) {
+        $stmt->bindValue(":$key", $value);
+    }
+    $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+    
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -82,5 +91,47 @@ function addReview($pdo, $venue_id, $client_id, $rating, $comment) {
         'rating' => $rating,
         'comment' => $comment
     ]);
+}
+function checkAvailability($pdo, $venue_id, $start_time, $end_time) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) FROM bookings 
+        WHERE venue_id = :venue_id 
+        AND status != 'cancelled'
+        AND (
+            (start_time < :end_time AND end_time > :start_time)
+        )
+    ");
+    $stmt->execute([
+        'venue_id' => $venue_id,
+        'start_time' => $start_time,
+        'end_time' => $end_time
+    ]);
+    return $stmt->fetchColumn() == 0;
+}
+
+function getTotalVenues($pdo, $search = '', $min_price = '', $max_price = '', $capacity = '') {
+    $sql = "SELECT COUNT(*) FROM venues WHERE 1=1";
+    $params = [];
+
+    if ($search) {
+        $sql .= " AND (name LIKE :search OR address LIKE :search)";
+        $params['search'] = "%$search%";
+    }
+    if ($min_price) {
+        $sql .= " AND price_per_day >= :min_price";
+        $params['min_price'] = $min_price;
+    }
+    if ($max_price) {
+        $sql .= " AND price_per_day <= :max_price";
+        $params['max_price'] = $max_price;
+    }
+    if ($capacity) {
+        $sql .= " AND capacity >= :capacity";
+        $params['capacity'] = $capacity;
+    }
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchColumn();
 }
 ?>
