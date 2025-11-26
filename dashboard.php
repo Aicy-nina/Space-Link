@@ -50,7 +50,7 @@ if ($role === 'host' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['c
 
     $sql = "INSERT INTO venues (host_id, name, description, address, price_per_day, capacity, image_url) 
             VALUES (:host_id, :name, :description, :address, :price, :capacity, :image_url)";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $pdo->prepare($sql); 
     try {
         $stmt->execute([
             'host_id' => $user_id,
@@ -126,6 +126,27 @@ if ($role === 'host' && isset($_POST['delete_venue'])) {
             <div style="background: #d1fae5; color: #065f46; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                 <?php echo $message; ?>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'host'): ?>
+            <?php 
+            $revenue = getHostRevenue($pdo, $user_id);
+            ?>
+            <div class="dashboard-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
+                <h2 style="color: white; margin-bottom: 20px;">💰 Revenue Overview</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 5px;">Total Revenue</div>
+                        <div style="font-size: 2rem; font-weight: bold;">sh <?php echo number_format($revenue['total_revenue'], 2); ?></div>
+                        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;"><?php echo $revenue['total_bookings']; ?> confirmed bookings</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 5px;">Your Earnings (After 20% Commission)</div>
+                        <div style="font-size: 2rem; font-weight: bold;">sh <?php echo number_format($revenue['host_earnings'], 2); ?></div>
+                    </div>
+                </div>
+            </div>
+
         <?php endif; ?>
 
         <?php if ($role === 'host'): ?>

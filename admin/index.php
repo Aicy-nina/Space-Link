@@ -21,7 +21,7 @@ $total_bookings = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Space Link</title>
@@ -44,6 +44,7 @@ $total_bookings = $stmt->fetchColumn();
             <a href="index.php" class="active">Dashboard</a>
             <a href="users.php">Manage Users</a>
             <a href="venues.php">Manage Venues</a>
+            <a href="bookings.php">Manage Bookings</a>
             <a href="../index.php">View Site</a>
             <a href="../logout.php" style="margin-top: auto; color: #ef4444;">Logout</a>
         </div>

@@ -13,7 +13,7 @@ function registerUser($pdo, $first_name, $last_name, $username, $email, $passwor
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :username");
     $stmt->execute(['username' => $username]);
     if ($stmt->fetch()) {
-        return "Username already taken.";
+        return "Username already taken."; 
     }
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);

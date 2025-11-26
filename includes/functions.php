@@ -134,4 +134,38 @@ function getTotalVenues($pdo, $search = '', $min_price = '', $max_price = '', $c
     $stmt->execute($params);
     return $stmt->fetchColumn();
 }
+
+function getHostRevenue($pdo, $host_id) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            COUNT(*) as total_bookings,
+            COALESCE(SUM(b.total_price), 0) as total_revenue
+        FROM bookings b
+        JOIN venues v ON b.venue_id = v.id
+        WHERE v.host_id = :host_id AND b.status = 'confirmed'
+    ");
+    $stmt->execute(['host_id' => $host_id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    $total_revenue = $result['total_revenue'];
+    $admin_commission = $total_revenue * 0.20; // 20% commission
+    $host_earnings = $total_revenue * 0.80; // 80% for host
+    
+    return [
+        'total_bookings' => $result['total_bookings'],
+        'total_revenue' => $total_revenue,
+        'admin_commission' => $admin_commission,
+        'host_earnings' => $host_earnings
+    ];
+}
+
+function getTotalAdminCommission($pdo) {
+    $stmt = $pdo->query("
+        SELECT COALESCE(SUM(total_price), 0) as total_revenue
+        FROM bookings
+        WHERE status = 'confirmed'
+    ");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total_revenue'] * 0.20; // 20% commission
+}
 ?>

@@ -13,7 +13,7 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar"> 
         <div class="container">
             <a href="index.php" class="logo">Space Link</a>
             <div class="nav-links">
@@ -33,8 +33,7 @@ session_start();
             <h1>Find Unique Spaces for Your Next Event</h1>
             <p>Discover and book amazing venues for meetings, parties, and shoots.</p>
             <form action="index.php" method="GET" class="search-form">
-                <input type="text" name="search" placeholder="Search by name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
-                <input type="number" name="capacity" placeholder="Capacity" style="width: 120px;" value="<?php echo htmlspecialchars($_GET['capacity'] ?? ''); ?>">
+                <input type="text" name="search" placeholder="Search by location, price, and capacity..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
                 <button type="submit">Search</button>
             </form>
         </div>

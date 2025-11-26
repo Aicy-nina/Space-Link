@@ -21,7 +21,7 @@ if (!$venue || $venue['host_id'] !== $_SESSION['user_id']) {
     header("Location: dashboard.php");
     exit;
 }
-
+ 
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,10 +34,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle Image Upload (Optional update)
     $image_url = $venue['image_url'];
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
-        $upload_dir = 'uploads/';
-        $filename = uniqid() . '_' . basename($_FILES['image']['name']);
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename)) {
-            $image_url = $upload_dir . $filename;
+        // Validate file type - only allow images
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif'];
+        $original_name = $_FILES['image']['name'];
+        $extension = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+        
+        if (!in_array($extension, $allowed_extensions)) {
+            $message = "Error: Only image files are allowed (JPG, JPEG, PNG, GIF, WEBP)";
+        } else {
+            $relative_dir = 'uploads/';
+            $absolute_dir = __DIR__ . '/' . $relative_dir;
+            
+            if (!is_dir($absolute_dir)) {
+                mkdir($absolute_dir, 0777, true);
+            }
+
+            // Convert jfif to jpg for better compatibility
+            if ($extension === 'jfif') {
+                $extension = 'jpg';
+            }
+            
+            // Create a clean filename
+            $filename = uniqid() . '.' . $extension;
+            $target_file = $absolute_dir . $filename;
+
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                $image_url = $relative_dir . $filename;
+            }
         }
     }
 

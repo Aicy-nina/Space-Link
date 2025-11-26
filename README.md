@@ -32,12 +32,4 @@ To run this project, you need a local server environment that supports PHP and M
 
 ### 3. Run the Application
 1.  Copy the project folder to `C:\xampp\htdocs\Space-Link`.
-2.  Open your browser and visit: [http://localhost/Space-Link](http://localhost/Space-Link)
-
-## Admin Access
-To access the Admin Panel:
-1.  Register a new account.
-2.  Go to **phpMyAdmin** > `users` table.
-3.  Edit your user and change the `role` from `client` to `admin`.
-4.  Log out and log back in.
-5.  Visit `/admin/index.php`.
+2.  Open your browser and visit: [http://localhost/Space-Link]

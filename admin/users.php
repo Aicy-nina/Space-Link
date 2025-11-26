@@ -43,11 +43,13 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
             <a href="index.php">Dashboard</a>
             <a href="users.php" class="active">Manage Users</a>
             <a href="venues.php">Manage Venues</a>
+            <a href="bookings.php">Manage Bookings</a>
             <a href="../index.php">View Site</a>
             <a href="../logout.php" style="margin-top: auto; color: #ef4444;">Logout</a>
         </div>
         <div class="main-content">
             <h1>Manage Users</h1>
+            
             <?php if (isset($message)) echo "<p style='color: green; margin-bottom: 15px;'>$message</p>"; ?>
             <table>
                 <thead>
@@ -55,6 +57,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
                         <th>ID</th>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>National ID</th>
                         <th>Role</th>
                         <th>Joined</th>
                         <th>Actions</th>
@@ -66,6 +69,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
                         <td><?php echo $user['id']; ?></td>
                         <td><?php echo htmlspecialchars($user['username']); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
+                        <td><?php echo htmlspecialchars($user['national_id'] ?: 'N/A'); ?></td>
                         <td>
                             <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; background: <?php echo $user['role'] == 'admin' ? '#fee2e2; color: #991b1b' : ($user['role'] == 'host' ? '#d1fae5; color: #065f46' : '#e0f2fe; color: #075985'); ?>">
                                 <?php echo ucfirst($user['role']); ?>
