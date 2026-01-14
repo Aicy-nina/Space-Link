@@ -1,7 +1,9 @@
 <?php
 require_once 'db.php';
 
-function registerUser($pdo, $first_name, $last_name, $username, $email, $password, $role, $national_id = null) {
+function registerUser(
+    $pdo, $first_name, $last_name, $username,
+    $email, $password, $role, $national_id = null) {
     // Check if email already exists
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
     $stmt->execute(['email' => $email]);

@@ -59,7 +59,8 @@ session_start();
 
             foreach ($venues as $venue): ?>
                 <div class="venue-card">
-                    <img src="<?php echo htmlspecialchars($venue['image_url'] ?: 'assets/images/placeholder.png'); ?>" alt="<?php echo htmlspecialchars($venue['name']); ?>">
+                    <img src="<?php echo htmlspecialchars($venue['image_url'] ?: 'assets/images/placeholder.png'); 
+                    ?>" alt="<?php echo htmlspecialchars($venue['name']); ?>">
                     <div class="venue-info">
                         <h3><?php echo htmlspecialchars($venue['name']); ?></h3>
                         <p class="location"><?php echo htmlspecialchars($venue['address']); ?></p>

@@ -1,5 +1,8 @@
 # Space Link - Rental Booking System
 
+**[🔴 LIVE DEMO](http://my-space-link.infinityfreeapp.com)**
+
+
 Space Link is a modern platform for booking venues for events, meetings, and parties.
 
 ## Features
@@ -30,6 +33,14 @@ To run this project, you need a local server environment that supports PHP and M
 6.  Click **Choose File** and select `database.sql` from the project folder.
 7.  Click **Import**.
 
-### 3. Run the Application
-1.  Copy the project folder to `C:\xampp\htdocs\Space-Link`.
-2.  Open your browser and visit: [http://localhost/Space-Link]
+3.  Run the Application:
+    *   Copy the project folder to `C:\xampp\htdocs\Space-Link`.
+    *   Open your browser and visit: [http://localhost/Space-Link]
+
+## Deployment (InfinityFree)
+This project is hosted on InfinityFree.
+
+1.  **Database:** Use `database_production.sql` (sanitized for shared hosting).
+2.  **Config:** Update `includes/db.php` with your live database credentials.
+3.  **Upload:** Upload all files to the `htdocs` folder via File Manager.
+

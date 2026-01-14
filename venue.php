@@ -47,6 +47,8 @@ $message = '';
 
         <div class="venue-details-grid">
             <div class="venue-main">
+                <!-- === PRESENTATION POINT: IMAGE DISPLAY === -->
+                <!-- This is where the uploaded image is shown to the user -->
                 <img src="<?php echo htmlspecialchars($venue['image_url'] ?: 'assets/images/placeholder.png'); ?>" alt="<?php echo htmlspecialchars($venue['name']); ?>" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
                 <h1><?php echo htmlspecialchars($venue['name']); ?></h1>
                 <p class="location" style="font-size: 1.1rem;"><?php echo htmlspecialchars($venue['address']); ?></p>
@@ -65,6 +67,8 @@ $message = '';
                     <p class="price-tag">sh <?php echo $venue['price_per_day']; ?> <span>/ day</span></p>
                     
                     <?php if (isset($_SESSION['user_id'])): ?>
+                        <!-- === PRESENTATION POINT: BOOKING FORM === -->
+                        <!-- This form collects the booking details (date, time, duration) -->
                         <form action="checkout.php" method="POST">
                             <input type="hidden" name="venue_id" value="<?php echo $venue['id']; ?>">
                             <input type="hidden" name="price_per_day" value="<?php echo $venue['price_per_day']; ?>">

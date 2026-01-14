@@ -150,7 +150,8 @@ arsort($venue_earnings);
                         <td><?php echo htmlspecialchars($booking['host_name']); ?></td>
                         <td>
                             <?php echo htmlspecialchars($booking['client_name']); ?><br>
-                            <small style="color: #6b7280;"><?php echo htmlspecialchars($booking['client_email']); ?></small>
+                            <small style="color: #6b7280;">
+                                <?php echo htmlspecialchars($booking['client_email']); ?></small>
                         </td>
                         <td><?php echo $start->format('M d, Y H:i'); ?></td>
                         <td>sh <?php echo number_format($booking['total_price'], 2); ?></td>

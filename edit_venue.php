@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = $_POST['price'];
     $capacity = $_POST['capacity'];
     
-    // Handle Image Upload (Optional update)
+    // === PRESENTATION POINT: IMAGE UPLOAD LOGIC ===
+    // This section handles the file upload when a user adds or updates a venue image.
     $image_url = $venue['image_url'];
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
         // Validate file type - only allow images
@@ -42,9 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!in_array($extension, $allowed_extensions)) {
             $message = "Error: Only image files are allowed (JPG, JPEG, PNG, GIF, WEBP)";
         } else {
+            // 1. Define where to save the image
             $relative_dir = 'uploads/';
             $absolute_dir = __DIR__ . '/' . $relative_dir;
             
+            // 2. Create the directory if it doesn't exist
             if (!is_dir($absolute_dir)) {
                 mkdir($absolute_dir, 0777, true);
             }
@@ -54,10 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $extension = 'jpg';
             }
             
-            // Create a clean filename
+            // 3. Generate a unique filename to prevent overwriting
             $filename = uniqid() . '.' . $extension;
             $target_file = $absolute_dir . $filename;
 
+            // 4. Move the uploaded file from temporary storage to our uploads folder
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                 $image_url = $relative_dir . $filename;
             }
@@ -143,6 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php else: ?>
                         <p>No image uploaded.</p>
                     <?php endif; ?>
+                    <!-- === PRESENTATION POINT: IMAGE INPUT === -->
+                    <!-- This input field allows the user to select an image file from their computer -->
                     <label>Change Image (Optional)</label>
                     <input type="file" name="image" accept="image/*">
                 </div>

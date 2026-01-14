@@ -20,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($role === 'host' && empty($national_id)) {
         $error = "National ID is required for hosts.";
     } else {
+        // === PRESENTATION POINT: USER REGISTRATION ===
+        // This function call creates the new user in the database.
+        // It handles password hashing (security) inside 'includes/auth.php'.
         $result = registerUser($pdo, $first_name, $last_name, $username, $email, $password, $role, $national_id);
         if ($result === true) {
             $success = "Registration successful! You can now <a href='login.php'>login</a>.";
